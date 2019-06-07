@@ -46,7 +46,7 @@ public class ExRateAPIController {
         return ResponseEntity.ok(exRateCalService.convertForm(exchangeRate));
     }
 
-    @GetMapping("/receivingcurrency")
+    @GetMapping("/receiving-currency")
     public ResponseEntity getReceivingAmount(@Valid @ModelAttribute CurrencyDto currencyDto) {
         Map<String, String> response = new HashMap<>();
         Double exchangeRate = exRateCalService.getExRateCal(currencyDto.getSendingCon(), currencyDto.getReceivingCon());
@@ -55,5 +55,10 @@ public class ExRateAPIController {
         response.put("exrate", exRateCalService.convertForm(exchangeRate));
         response.put("receivingAmount", exRateCalService.convertForm(receivingAmount));
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/exception-test")
+    public String getReceivingAmount() throws Exception {
+        throw new Exception();
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lagn="ko" xmlns="http://www.w3.org/1999/xhtml">
+<html lagn="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -119,12 +119,12 @@
             return;
         }
         $.ajax({
-            url: "/api/receivingcurrency?sendingCon=" + sendingCon
+            url: "/api/receiving-currency?sendingCon=" + sendingCon
                 + "&receivingCon=" + receivingCon
                 + "&amount=" + sendingAmount,
             type: "GET",
             success: function (response) {
-                $('#response').html(sendingCon +" 에서 보내는 "+ sendingAmount +
+                $('#response').html(sendingCon +" 에서 "+receivingCon+" 에 보내는 "+ sendingAmount +
                     " 에 대한 수취금액은 " + response.receivingAmount + " " + receivingCon + " 입니다.");
             },
             error: function (err) {
