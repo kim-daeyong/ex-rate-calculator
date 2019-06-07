@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class APIserviceTest {
+public class ExRateAPITest {
 
 
     @Autowired
@@ -24,11 +24,6 @@ public class APIserviceTest {
         Assert.assertNotNull(exRateAPIDto);
     }
 
-    @Test
-    public void getAPIDataByUSD() {
-        ExRateAPIDto exRateAPIDto = exRateAPIService.getExchangeRate();
-        Assert.assertNotNull(exRateAPIDto);
-    }
 
 
 }

@@ -5,6 +5,7 @@ import example.daeyong.kim.exratecalculator.config.WebConfig;
 import example.daeyong.kim.exratecalculator.dto.CurrencyDto;
 import example.daeyong.kim.exratecalculator.dto.ExRateAPIDto;
 import example.daeyong.kim.exratecalculator.service.ExRateAPIService;
+import example.daeyong.kim.exratecalculator.service.ExRateCalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -25,6 +28,9 @@ public class ExRateAPIController {
 
     @Autowired
     ExRateAPIService exRateAPIService;
+
+    @Autowired
+    ExRateCalService exRateCalService;
 
     private ExRateAPIDto exRateAPIDto;
 
@@ -35,9 +41,19 @@ public class ExRateAPIController {
 //    }
 
     @GetMapping("/exchangerate")
-    public ResponseEntity getExchangeRate(@ModelAttribute CurrencyDto currencyDto) {
-        Double exchangeRate = exRateAPIService.getExchangeRate(currencyDto.getSendingCon(), currencyDto.getReceivingCon());
-        return  new ResponseEntity(exRateAPIDto, HttpStatus.OK);
+    public ResponseEntity getExchangeRate(@Valid @ModelAttribute CurrencyDto currencyDto) {
+        Double exchangeRate = exRateCalService.getExRateCal(currencyDto.getSendingCon(), currencyDto.getReceivingCon());
+        return ResponseEntity.ok(exRateCalService.convertForm(exchangeRate));
+    }
 
+    @GetMapping("/receivingcurrency")
+    public ResponseEntity getReceivingAmount(@Valid @ModelAttribute CurrencyDto currencyDto) {
+        Map<String, String> response = new HashMap<>();
+        Double exchangeRate = exRateCalService.getExRateCal(currencyDto.getSendingCon(), currencyDto.getReceivingCon());
+        Double receivingAmount = exchangeRate * currencyDto.getAmount();
+
+        response.put("exrate", exRateCalService.convertForm(exchangeRate));
+        response.put("receivingAmount", exRateCalService.convertForm(receivingAmount));
+        return ResponseEntity.ok(response);
     }
 }

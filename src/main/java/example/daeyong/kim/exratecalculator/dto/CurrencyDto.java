@@ -13,9 +13,9 @@ import javax.validation.constraints.NotBlank;
 public class CurrencyDto {
 
     // notNull, "", " " 를 허용하지않는다.
-    @NotBlank
+//    @NotBlank
     private String sendingCon;
-    @NotBlank
+//    @NotBlank
     private String receivingCon;
 
     @Min(0)
