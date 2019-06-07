@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ExRateServiceImpl implements ExRateService {
+public class ExRateCalServiceImpl implements ExRateCalService {
 }

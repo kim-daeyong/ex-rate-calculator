@@ -54,7 +54,7 @@
         <div class="input-group-prepend">
             <span class="input-group-text">송금액</span>
         </div>
-        <input type="text" class="form-control"  id="sendingCash" placeholder="금액을 USD로 적어주세요">
+        <input type="text" class="form-control"  id="amount" placeholder="금액을 USD로 적어주세요">
         <div class="input-group-prepend">
             <span class="input-group-text">USD</span>
         </div>
@@ -69,4 +69,28 @@
 </div>
 
 </body>
+<script>
+    function getExchangeRate() {
+        var sendingCon = $('#sendingCon').val();
+        var receivingCon = $('#receivingCon').val();
+        $.ajax({
+            url: "/api/exchange-rate?sendingCountry=" + sendingCon + "&receivingCountry=" + receivingCon,
+            type: "GET",
+            success: function (exchangeRate) {
+                $('#exchangeRate').text(exchangeRate + " " + receivingCountry + "/" + sendingCountry);
+                $('#sendingAmountCurrency').text(sendingCountry);
+                $('#submitResponse').html("");
+            },
+            error: function (jqXHR) {
+                if (jqXHR.status === 400) {
+                    alert("입력값이 올바르지 않습니다.");
+                } else if (jqXHR.status === 500) {
+                    alert("서버의 문제가 발생했습니다.");
+                }
+            }
+        });
+    }
+
+
+</script>
 </html>
