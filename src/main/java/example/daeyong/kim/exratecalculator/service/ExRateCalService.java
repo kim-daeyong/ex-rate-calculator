@@ -1,4 +1,4 @@
 package example.daeyong.kim.exratecalculator.service;
 
-public interface ExRateService {
+public interface ExRateCalService {
 }
