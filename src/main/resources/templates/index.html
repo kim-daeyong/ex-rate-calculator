@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<html lagn="ko" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layout/default">
+<html lagn="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1-2/jquery.min.js"></script>
+    <script src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <title>환율 계산기</title>
@@ -16,57 +12,133 @@
 
 
 <div class="container" style="width:800px; border: 1px solid black; margin-top: 20px ">
-<form id="exrateCal" style="margin: 20px">
     <h1 style="margin-bottom: 20px">환율 계산</h1>
 
     <div class="input-group mb-sm-1" style="width:70%;">
         <div class="input-group-prepend">
-            <span class="input-group-text">송금국가</span>
+            <span class="input-group-text" for="sendingCon">송금국가</span>
         </div>
         <select class="form-control" id="sendingCon">
             <option value="USD" >미국(USD)</option>
-            <!--<option>2</option>-->
-            <!--<option>3</option>-->
-            <!--<option>4</option>-->
+
         </select>
     </div>
 
     <div class="input-group mb-sm-1" style="width:70%; padding-top: 10px">
         <div class="input-group-prepend">
-            <span class="input-group-text">수취국가</span>
+            <span class="input-group-text" for="receivingCon">수취국가</span>
         </div>
         <select class="form-control" id="receivingCon">
             <option value="KRW" >한국(KRW)</option>
-            <option value="JPN">일본(JPN)</option>
+            <option value="JPY">일본(JPY)</option>
             <option value="PHP">필리핀(PHP)</option>
         </select>
     </div>
 
 
     <div class="field" style="width:70%; padding-top: 10px">
-        <label><b>현재 환율 : </b></label>
-        <div class="field">
+        <label><b>현재 환율 :   </b></label>
             <span id="exRate"></span>
-        </div>
     </div>
 
     <div class="input-group mb-sm-1" style="padding-top: 10px">
         <div class="input-group-prepend">
             <span class="input-group-text">송금액</span>
         </div>
-        <input type="text" class="form-control"  id="sendingCash" placeholder="금액을 USD로 적어주세요">
+        <input type="text" class="form-control"  id="amount" placeholder="금액을 USD로 적어주세요">
         <div class="input-group-prepend">
             <span class="input-group-text">USD</span>
         </div>
         <div class="input-group-append">
-            <button class="btn btn-success" type="submit">Submit</button>
+            <button class="btn btn-success" onclick="getReceivingCurrency()">Submit</button>
         </div>
     </div>
 
 
-</form>
+    <div class="field" style="width:70%; padding-top: 10px;margin-bottom: 20px">
+        <span id="response"></span>
+    </div>
+
 
 </div>
 
 </body>
+<script>
+    // index 시작할 때 처음 값에 대한 환율정보를 보여준다.
+    $(document).ready(function () {
+        getExchangeRate();
+    });
+
+    // select에서 값을 바꿨을때 그 결과 값을 보여준다
+    $('select').on('change', function(){
+        getExchangeRate();
+    });
+
+    function getExchangeRate() {
+        var sendingCon = $('#sendingCon').val();
+        var receivingCon = $('#receivingCon').val();
+
+        console.log(sendingCon);
+        console.log(receivingCon);
+
+        $.ajax({
+            url: "/api/exchangerate?sendingCon=" + sendingCon + "&receivingCon=" + receivingCon,
+            type: "GET",
+            success: function (exRate) {
+                $('#exRate').text(exRate + " " + receivingCon + "/" + sendingCon);
+                // $('#sendingAmountCurrency').text(sendingCon);
+                // $('#submitResponse').html("");
+
+            },
+            error: function (err) {
+                if (err.status === 400) {
+                    console.log(err);
+                    alert("입력값이 올바르지 않습니다.");
+                } else if (err.status === 500) {
+                    console.log(err);
+                    alert("서버의 문제가 발생했습니다.");
+                }
+            }
+        });
+    }
+
+
+
+    function getReceivingCurrency() {
+        var sendingAmount = $('#amount').val();
+        var sendingCon = $('#sendingCon').val();
+        var receivingCon = $('#receivingCon').val();
+
+        console.log(sendingCon);
+        console.log(receivingCon);
+        console.log(sendingAmount);
+
+        if (sendingAmount.length <= 0 || sendingAmount < 0 || sendingAmount > 10000) {
+            alert("송금액이 바르지 않습니다. 다시 입력해주세요");
+            $('#response').html("<div><h style='color:red'>송금액이 바르지 않습니다. 다시 입력해주세요</h><div>");
+            return;
+        }
+        $.ajax({
+            url: "/api/receiving-currency?sendingCon=" + sendingCon
+                + "&receivingCon=" + receivingCon
+                + "&amount=" + sendingAmount,
+            type: "GET",
+            success: function (response) {
+                $('#response').html(sendingCon +" 에서 "+receivingCon+" 에 보내는 "+ sendingAmount +
+                    " 에 대한 수취금액은 " + response.receivingAmount + " " + receivingCon + " 입니다.");
+            },
+            error: function (err) {
+                if (err.status === 400) {
+                    console.log(err);
+                    alert("입력값이 올바르지 않습니다.");
+                } else if (err.status === 500) {
+                    console.log(err);
+                    alert("서버의 문제가 발생했습니다.");
+                }
+            }
+        });
+    }
+
+
+</script>
 </html>
