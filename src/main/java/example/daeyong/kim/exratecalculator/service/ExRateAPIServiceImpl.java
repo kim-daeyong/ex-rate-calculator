@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.DecimalFormat;
 import java.util.Optional;
 
 @Service
@@ -21,8 +22,8 @@ public class ExRateAPIServiceImpl implements ExRateAPIService {
     private String source;
     @Value("${currencyLayer.currencies}")
     private String currencies;
-    @Value("${currencyLayer.refreshRate}")
-    private int refreshRate;
+    @Value("${currencyLayer.renewRate}")
+    private int renewRate;
 
     private RestTemplate restTemplate;
     private ExRateAPIDto exRateAPIDto;
@@ -54,5 +55,7 @@ public class ExRateAPIServiceImpl implements ExRateAPIService {
                     + exRateAPIDto.getError().get("type"));
         }
     }
+
+
 
 }
