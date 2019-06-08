@@ -74,6 +74,13 @@
         getExchangeRate();
     });
 
+    function currencyData(USDKRW, USDJPY, USDPHP){
+        var USDKRW = USDKRW;
+        var USDJPY = USDJPY;
+        var USDPHP = USDPHP;
+
+    }
+
     function getExchangeRate() {
         var sendingCon = $('#sendingCon').val();
         var receivingCon = $('#receivingCon').val();
@@ -86,8 +93,6 @@
             type: "GET",
             success: function (exRate) {
                 $('#exRate').text(exRate + " " + receivingCon + "/" + sendingCon);
-                // $('#sendingAmountCurrency').text(sendingCon);
-                // $('#submitResponse').html("");
 
             },
             error: function (err) {
