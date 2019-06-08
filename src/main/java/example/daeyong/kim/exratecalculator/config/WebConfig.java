@@ -10,10 +10,10 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class WebConfig {
 
-    private RestTemplate restTemplate;
-
-    public WebConfig(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
+//    private RestTemplate restTemplate;
+    //todo WebClient 교체
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) { return builder.build();
     }
 
 

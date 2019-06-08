@@ -4,6 +4,7 @@ package example.daeyong.kim.exratecalculator.service;
 import example.daeyong.kim.exratecalculator.dto.ExRateAPIDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -12,6 +13,7 @@ import java.text.DecimalFormat;
 import java.util.Optional;
 
 @Service
+@PropertySource( value = "/apikey.properties", ignoreResourceNotFound = true )
 public class ExRateAPIServiceImpl implements ExRateAPIService {
 
     @Value("${currencyLayer.accessKey}")
@@ -22,8 +24,6 @@ public class ExRateAPIServiceImpl implements ExRateAPIService {
     private String source;
     @Value("${currencyLayer.currencies}")
     private String currencies;
-    @Value("${currencyLayer.renewRate}")
-    private int renewRate;
 
     private RestTemplate restTemplate;
     private ExRateAPIDto exRateAPIDto;
