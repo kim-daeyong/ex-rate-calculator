@@ -18,31 +18,30 @@ public class LogAspect {
 
     @Before("execution(public * example..*(..))")
     public void before(JoinPoint jointPoint) {
-        String signatureString = jointPoint.getSignature().getName();
-        logger.info("@Before [ " + signatureString + " ] 메서드 실행 전처리 수행 ");
+        String signatureName = jointPoint.getSignature().getName();
+        logger.info("@Before [ " + signatureName + " ] 메서드 실행 전처리 수행 ");
         for(Object arg : jointPoint.getArgs()) {
-            logger.info("@Before [ " + signatureString + " ] 아규먼트 " + arg);
+            logger.info("@Before [ " + signatureName + " ] : " + arg);
         }
     }
 
     @AfterReturning(pointcut="execution(public * example.daeyong.kim.exratecalculator.*.*(..))", returning="ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) {
-        String signatureString = joinPoint.getSignature().getName();
-        logger.info("@AfterReturing [ " + signatureString + " ] 메서드 실행 후처리 수행");
-        logger.info("@AfterReturing [ " + signatureString + " ] 리턴값=" + ret);
+        String signatureName = joinPoint.getSignature().getName();
+        logger.info("@AfterReturing [ " + signatureName + " ] 메서드 실행 후처리 수행");
+        logger.info("@AfterReturing [ " + signatureName + " ] 리턴값=" + ret);
     }
 
-    @AfterThrowing(pointcut="execution(* *..service*.*(..))",
-            throwing="ex")
+    @AfterThrowing(pointcut="execution(* *..service*.*(..))", throwing="ex")
     public void afterThrowing(JoinPoint joinPoint, Throwable ex) {
-        String signatureString = joinPoint.getSignature().getName();
-        logger.info("@AfterThrowing [ " + signatureString + " ] 메서드 실행 중 예외 발생");
-        logger.info("@AfterThrowing [ " + signatureString + " ] 예외=" + ex.getMessage());
+        String signatureName = joinPoint.getSignature().getName();
+        logger.info("@AfterThrowing [ " + signatureName + " ] 메서드 실행 중 예외 발생");
+        logger.info("@AfterThrowing [ " + signatureName + " ] 예외=" + ex.getMessage());
     }
 
     @After("execution(* *..*.*service(..))")
     public void afterFinally(JoinPoint joinPoint) {
-        String signatureString = joinPoint.getSignature().getName();
-        logger.info("@After [ " + signatureString + " ] 메서드 실행 완료");
+        String signatureName = joinPoint.getSignature().getName();
+        logger.info("@After [ " + signatureName + " ] 메서드 실행 완료");
     }
 }

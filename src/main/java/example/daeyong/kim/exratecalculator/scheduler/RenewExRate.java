@@ -11,15 +11,13 @@ import java.util.Date;
 
 @Component
 @Slf4j
-public class RenewCurrency {
-
-
+public class RenewExRate {
 
     @Autowired
     ExRateAPIService exRateAPIService;
 
     @Scheduled(cron = "0 0 */1 * * *")
-    public String renweCurrency(){
+    public String renweExRate(){
         exRateAPIService.renewAPI();
 
         log.info("updated at : {}", new Date());
