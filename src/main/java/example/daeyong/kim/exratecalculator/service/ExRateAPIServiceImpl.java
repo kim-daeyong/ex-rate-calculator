@@ -37,15 +37,24 @@ public class ExRateAPIServiceImpl implements ExRateAPIService {
 
         Optional<ExRateAPIDto> check = Optional.ofNullable(exRateAPIDto);
         if (!check.isPresent()) {
-            exRateAPIDto = restTemplate.getForObject(endPoint + "/live?access_key=" + accessKey
-                            + "&source=" + source
-                            + "&currencies=" + currencies,
-                    ExRateAPIDto.class);
+            renewAPI();
         }
             checkExRateAPI();
 
             return exRateAPIDto;
         }
+
+    @Override
+    public ExRateAPIDto renewAPI() {
+        exRateAPIDto = restTemplate.getForObject(endPoint + "/live?access_key=" + accessKey
+                        + "&source=" + source
+                        + "&currencies=" + currencies,
+                ExRateAPIDto.class);
+
+        checkExRateAPI();
+
+        return exRateAPIDto;
+    }
 
     private void checkExRateAPI() {
         Optional<ExRateAPIDto> check = Optional.ofNullable(exRateAPIDto);

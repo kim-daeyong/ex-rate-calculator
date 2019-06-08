@@ -20,7 +20,7 @@ public class RenewCurrency {
 
     @Scheduled(cron = "0 0 */1 * * *")
     public String renweCurrency(){
-        exRateAPIService.getExchangeRate();
+        exRateAPIService.renewAPI();
 
         log.info("updated at : {}", new Date());
 
