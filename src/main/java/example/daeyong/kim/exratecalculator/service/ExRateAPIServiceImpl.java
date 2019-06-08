@@ -34,17 +34,20 @@ public class ExRateAPIServiceImpl implements ExRateAPIService {
 
     @Override
     public ExRateAPIDto getExchangeRate() {
+
+        Optional<ExRateAPIDto> check = Optional.ofNullable(exRateAPIDto);
+        if (!check.isPresent()) {
             exRateAPIDto = restTemplate.getForObject(endPoint + "/live?access_key=" + accessKey
                             + "&source=" + source
                             + "&currencies=" + currencies,
                     ExRateAPIDto.class);
-
-            checkExRateAPIDto();
+        }
+            checkExRateAPI();
 
             return exRateAPIDto;
         }
 
-    private void checkExRateAPIDto() {
+    private void checkExRateAPI() {
         Optional<ExRateAPIDto> check = Optional.ofNullable(exRateAPIDto);
         if (!check.isPresent()) {
             throw new RestClientException("API를 확인해주세요");
@@ -55,6 +58,9 @@ public class ExRateAPIServiceImpl implements ExRateAPIService {
                     + exRateAPIDto.getError().get("type"));
         }
     }
+
+
+
 
 
 
