@@ -96,13 +96,9 @@
 
             },
             error: function (err) {
-                if (err.status === 400) {
                     console.log(err);
                     alert("입력값이 올바르지 않습니다.");
-                } else if (err.status === 500) {
-                    console.log(err);
-                    alert("서버의 문제가 발생했습니다.");
-                }
+
             }
         });
     }
@@ -133,14 +129,10 @@
                     " 에 대한 수취금액은 " + response.receivingAmount + " " + receivingCon + " 입니다.");
             },
             error: function (err) {
-                if (err.status === 400) {
                     console.log(err);
                     alert("입력값이 올바르지 않습니다.");
-                } else if (err.status === 500) {
-                    console.log(err);
-                    alert("서버의 문제가 발생했습니다.");
+
                 }
-            }
         });
     }
 
