@@ -69,7 +69,7 @@ public class ExRateAPITest {
 
     @MockBean
     ExRateAPIController exRateAPIController;
-    
+
     @Test
     public void getAPIDataByUSDKRW() throws Exception {
 
