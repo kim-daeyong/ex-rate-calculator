@@ -1,6 +1,7 @@
 package example.daeyong.kim.exratecalculator.dto;
 
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
+@Builder
 public class CurrencyDto {
 
     // notNull, "", " " 를 허용하지않는다.
