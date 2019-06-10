@@ -16,7 +16,7 @@ public class RenewExRate {
     @Autowired
     ExRateAPIService exRateAPIService;
 
-    @Scheduled(cron = "0 0 */1 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public String renweExRate(){
         exRateAPIService.renewAPI();
 
