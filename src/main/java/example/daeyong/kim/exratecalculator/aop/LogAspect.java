@@ -8,6 +8,8 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -17,10 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 @Component // 1
 @Aspect // 2
 @Slf4j
+@PropertySource( value = "/apikey.properties", ignoreResourceNotFound = true )
 public class LogAspect {
 
+    @Value("${slackApi.key}")
+    private String accessKey;
+
     protected static Logger logger = LoggerFactory.getLogger(LogAspect.class);
-    private final SlackApi slackApi = new SlackApi("https://hooks.slack.com/services/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");
     private final SlackMessage slackMessage = new SlackMessage();
 
 
@@ -28,6 +33,7 @@ public class LogAspect {
     @Before("execution(public * example..*(..))")
     public void before(JoinPoint jointPoint) {
         String signatureName = jointPoint.getSignature().getName();
+        SlackApi slackApi = new SlackApi(""+accessKey+"");
         slackMessage.setUsername("testtest");
         slackMessage.setChannel("#general");
         logger.info("@Before [ " + signatureName + " ] 메서드 실행 전처리 수행 ");
@@ -53,6 +59,7 @@ public class LogAspect {
         String signatureName = joinPoint.getSignature().getName();
         logger.info("@AfterThrowing [ " + signatureName + " ] 메서드 실행 중 예외 발생");
         logger.info("@AfterThrowing [ " + signatureName + " ] 예외=" + ex.getMessage());
+        SlackApi slackApi = new SlackApi(""+accessKey+"");
         slackMessage.setUsername("testtest");
         slackMessage.setChannel("#general");
         HttpServletRequest request =
